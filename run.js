@@ -23,6 +23,12 @@ const options = require("yargs")
       "A file with secret key or seed phrases. It is not saved anywhere.",
     required: true,
   })
+  .option('prices', {
+    type: 'array',
+    description: 'array of prices, space separated',
+    required: true,
+    default: [],
+  })
   .option("timeinterval", {
     alias: "t",
     type: "num",
@@ -38,8 +44,7 @@ async function main() {
   const api = await ApiPromise.create({ provider });
 
   console.log(
-    `Connected to node: ${(await api.rpc.system.chain()).toHuman()} [ss58: ${
-      api.registry.chainSS58
+    `Connected to node: ${(await api.rpc.system.chain()).toHuman()} [ss58: ${api.registry.chainSS58
     }]`
   );
 
@@ -52,19 +57,18 @@ async function main() {
   const key =
     typeof options["secret-key"] !== "undefined"
       ? fs
-          .readFileSync(`${options["secret-key"]}`, "UTF-8")
-          .split(/\r?\n/)
-          .filter((entry) => entry.trim() != "")
+        .readFileSync(`${options["secret-key"]}`, "UTF-8")
+        .split(/\r?\n/)
+        .filter((entry) => entry.trim() != "")
       : undefined;
   const time = options["timeinterval"];
+  const prices = options["prices"];
 
   /// KSM Precision [kusama guide](https://guide.kusama.network/docs/kusama-parameters/#precision)
   const ksmPrecision = 1_000_000_000_000;
 
   let account = keyring.addFromUri(key[0]);
   console.log("🤖 ACCOUNT_ADDRESS:", account.address);
-
-  const prices = [10, 9.5, 7.7, 7.5];//, 7.1, 8.0, 8.1, 6.9, 7, 6.5, 6.2, 9];
 
   await new Promise((_) =>
     setInterval(async function () {

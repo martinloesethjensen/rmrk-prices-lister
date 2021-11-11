@@ -1,4 +1,4 @@
-# rmrk-ape-game-lister
+# rmrk-prices-lister
 
 This script will list an owner's NFT with an amount that is determined in an array over a specified timeinterval.
 
@@ -11,7 +11,7 @@ This script doesn't account for checking if NFT is belonging to the account addr
 Example
 
 ```sh
-node run.js --id "<RMRK_ID>" -e wss://westend-rpc.polkadot.io -s .seed -t 60
+node run.js --id "<RMRK_ID>" -e wss://westend-rpc.polkadot.io -s .seed -t 60 --prices 1 2 3 4 5
 ```
 
 ```text
@@ -24,6 +24,8 @@ Options:
                       wss://kusama-rpc.polkadot.io]          [string] [required]
   -s, --secret-key    A file with secret key or seed phrases. It is not saved
                       anywhere.                              [string] [required]
+      --prices        array of prices, space separated
+                                                [array] [required] [default: []]
   -t, --timeinterval  Timeinterval for listing in seconds             [required]
 ```
 
